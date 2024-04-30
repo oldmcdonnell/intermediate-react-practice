@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom"
 import EditTeam from "./EditTeam"
+import Todo from './Todo'
 
 const Title = () => {
   return (
@@ -15,6 +16,8 @@ function App() {
       <Link to='/about'>About</Link>
       <Title />
       <EditTeam />
+      {/* <Todo /> */}
+      <Link to='/Todo'>Todo</Link>
     </div>
   )
 }

@@ -15,6 +15,7 @@ import App from './App'
 import ErrorPage from './ErrorPage'
 import Header from './Header'
 import Footer from './Footer'
+import Todo from './Todo'
 
 
 function Layout() {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: '/about',
         element: <About />
+      },
+      {
+        path: '/Todo',
+        element: <Todo />
       },
     ]
   }
