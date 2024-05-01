@@ -23,7 +23,7 @@ function reducer(state, action) {
       return {
         player: action.updatePlayer
         //draft: action.nextDraft,
-        team: state.todos,
+        //team: state.todos,
       };
     };
     case 'added_todo': {

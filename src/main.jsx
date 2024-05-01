@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { createContext, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import {
   createBrowserRouter,
@@ -16,7 +16,7 @@ import ErrorPage from './ErrorPage'
 import Header from './Header'
 import Footer from './Footer'
 import Todo from './Todo'
-
+import EditTeam from './EditTeam'
 
 function Layout() {
   return (
@@ -48,9 +48,25 @@ const router = createBrowserRouter([
         path: '/Todo',
         element: <Todo />
       },
+      {
+        path: '/EditTeam',
+        element: <EditTeam />
+      },
     ]
   }
 ])
+
+export const NewPlayerContext = createContext()
+
+export const NewplayerProvider = ({ children }) => {
+  const [newPlayerArray, setNewPlayerArray] = useState([])
+
+  return(
+    <NewPlayerContext.Provider value={{ newPlayerArray, setNewPlayerArray}}>
+      {children}
+    </NewPlayerContext.Provider>
+  )
+}
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <RouterProvider router={router} />
