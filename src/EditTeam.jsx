@@ -71,7 +71,14 @@ const EditTeam = () => {
           {state.players.map(player => {
             <div key={player.playerNumber}>
               Player {player.playerNumber}: {player.name}
-            <NumberPicker>Attack</NumberPicker>
+              <label>Attack</label>
+                <NumberPicker
+                max={10}
+                min={1}
+                defaultValue={0}
+                value={attack}
+                onChange={value => attack(player.attack)}
+                />
             <NumberPicker>Health</NumberPicker>
             <NumberPicker>Speed</NumberPicker>
             </div>
