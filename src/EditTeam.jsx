@@ -4,102 +4,80 @@ import { useReducer } from 'react'
 import Form from 'react-bootstrap/Form';
 import { Link } from "react-router-dom";
 import { act } from "react";
-import { NewPlayerContext } from "./main";
+import { TeamContext } from "./main";
+import { Container } from "react-bootstrap";
 
 
 
-const initialState = {
-  team: [{playerName:"A", 
-  playerId:0,
-  playerAttack:0, 
-  playerHealth:0, 
-  playerSpeed:0},
-  {playerName:"Z",
-  playerId:1,
-  playerAttack:0, 
-  playerHealth:0, 
-  playerSpeed:0}
-  ]
+export const initialState = {
+  players: []
 }
+//state will be state.players
 
-function reducer(state, action){
-  console.log(action)
-  switch(action.type){
+export const teamReducer = (state, action) =>{
+  switch(action.type) {
     case 'addPlayer':
-        return {team: [...state.team, {name:action.playerName}]}
-    console.log()
-      case 'playerAttackPlus':
-        return {team: [...state.team, {playerAttack: state.team.playerAttack+1} ]}
-        console.log("player attack plus")
-        console.log(state.playerAttack)
-      case 'playerAttackMinus':
-        return { playerAttack: state.playerAttack -1 }
-      default:
+      console.log('add player', action)
+      if (state.players.length < 4){
+        return [...state.players, {playerNumber: state.players.length,
+        name: action.name,
+        health: 4,
+        attack: 6,
+        speed: 3
+        }]
+      }
+      else {
         return state
+      }
+    case 'increaseHealth':
+      return {players: state.players.map(el =>{
+        if (el.playerNumber ===action.who){
+          el.health = el.health +1
+        }
+        return (el)      
+      })}
+    case 'decreaseHealth':
+      console.log('decrease', action)
+      return {players: state.players.map(el =>{
+        console.log('Array map #', el.playerNumber, action.who)
+        if (el.playerNumber === action.who){
+          el.health = el.health - 1
+        }
+        return (el)
+      })}
   }
 }
 
-function EditTeam() {
-  const {newPlayerArray, setNewPlayerArray} = useContext(NewPlayerContext)
+const EditTeam = () => {
+  const {state, dispatch} = useContext(TeamContext)
+  console.log('state', state)
+  const [nameText, setNameText] = useState('')
 
-  const [nameText, setNameText] = useState("")
-  const [playerAttack, setPlayerAttack] = useState(0)
-  const [playerHealth, setPlayerHealth] = useState(0)
-  const [playerSpeed, setPlayerSpeed] = useState(0)
-  const [state, dispatch] = useReducer(reducer, initialState)
+  return (
+    <div>
+      <Container>
+        <Row>
+          <div>
+          <h4>Input Name</h4>
+          <input
+            value={nameText}
+            onChange={event => setNameText(event.target.value)}
+            />
+          <button onClick={() => dispatch({type: 'addPlayer', 
+                                          name: nameText})}>Submit</button>
+          <div></div>
 
-  const handleNumberChange = (type, value) =>{
-    dispatch({type :type, numberValue: value})
-  }
 
-  const handleSubmit = () => {
-    setNewPlayerArray([...newPlayerArray, {playerName:name, 
-      playerHealth:state.health,
-      playerAttack:state.attack,
-       playerSpeed:state.speed }])
-  }
-
-  console.log(state)
-    return (
-      <div className="p-5">
-          {state.team.map((members, index) => {
-            console.log(members)
-            return (
-            <>
-              <div key={index}>{members.name}</div>
-                <input type="text" value={nameText} onChange={event=> setNameText(event.target.value)}>
-
-                </input>
-                <button onClick={() => dispatch({type:"addPlayer", playerName:nameText})}>Submit</button>
-                <label>Attack</label>
-                <NumberPicker
-                max={10}
-                min={1}
-                defaultValue={0}
-                value={playerAttack}
-                onChange={event => setPlayerHealth(event.target.value)}
-                />
-                
-                <NumberPicker
-                max={10}
-                min={1}
-                defaultValue={0}
-                value={attack}
-                onChange={event => setPlayerSpeed(event.target.value)}
-                />
-                <NumberPicker
-                max={10}
-                min={1}
-                defaultValue={0}
-                value={attack}
-                onChange={event => setPlayerAttack(event.target.value)}
-                />
-            </>
-          )
-})}
-      </div>
-    )
-  }
-  
-  
-  export default EditTeam
+          {state.players.map(player => {
+            <div key={player.playerNumber}>
+              Player {player.playerNumber}: {player.name}
+            <NumberPicker>Attack</NumberPicker>
+            <NumberPicker>Health</NumberPicker>
+            <NumberPicker>Speed</NumberPicker>
+            </div>
+          })}
+        </Row>
+      </Container>
+    </div>
+  )
+}

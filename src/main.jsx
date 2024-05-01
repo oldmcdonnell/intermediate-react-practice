@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useReducer, useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import {
   createBrowserRouter,
@@ -56,18 +56,20 @@ const router = createBrowserRouter([
   }
 ])
 
-export const NewPlayerContext = createContext()
+export const TeamContext = createContext()
 
-export const NewplayerProvider = ({ children }) => {
-  const [newPlayerArray, setNewPlayerArray] = useState([])
+const TeamProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(teamReducer, initialState)
 
   return(
-    <NewPlayerContext.Provider value={{ newPlayerArray, setNewPlayerArray}}>
+    <TeamContext.Provider value={{ state, dispatch}}>
       {children}
-    </NewPlayerContext.Provider>
+    </TeamContext.Provider>
   )
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
+<TeamProvider>
   <RouterProvider router={router} />
+</TeamProvider>
 )
